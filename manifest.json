@@ -1,27 +1,37 @@
 {
   "manifest_version": 3,
   "name": "Trace Hider",
-  "version": "2.5",
-  "description": "Registro privado y persistente con capturas compactas, lectura de formularios y palabra clave para el omnibox.",
+  "version": "1.2.1",
+  "description": "Registro privado y persistente con acceso protegido...",
+  "author": "José",
   "icons": {
-    "48": "icon.png"
+    "48": "assets/icon.png"
   },
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["src/background.js"]
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"],
+      "js": ["src/content.js"],
       "run_at": "document_idle"
     }
   ],
   "options_ui": {
-    "page": "options.html",
+    "page": "src/options/options.html",
     "open_in_tab": true
   },
   "omnibox": {
     "keyword": "secreto"
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+S",
+        "mac": "Command+Shift+S"
+      },
+      "description": "Abrir Trace Hider"
+    }
   },
   "permissions": [
     "tabs",

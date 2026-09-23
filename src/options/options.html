@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trace Hider - Panel Privado</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      margin: 0;
+      padding: 20px;
+    }
+
+    #lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #121212;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .lock-box {
+      background-color: #1e1e1e;
+      border: 2px solid #ff7700;
+      padding: 40px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      width: 320px;
+    }
+
+    .lock-box h2 {
+      color: #ff7700;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+
+    .lock-box input, .lock-box button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    .lock-box input {
+      background-color: #2a2a2a;
+      border: 1px solid #444;
+      color: #fff;
+      text-align: center;
+    }
+
+    .lock-box button {
+      background-color: #ff7700;
+      color: #fff;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .lock-box button:hover {
+      background-color: #e06600;
+    }
+
+    #main-content {
+      display: none;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #2a2a2a;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #ff7700;
+      font-size: 1.6rem;
+      margin: 0;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+    }
+
+    .toolbar button {
+      background-color: #2a2a2a;
+      color: #fff;
+      border: 1px solid #444;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .toolbar button:hover {
+      background-color: #333;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .settings-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .settings-panel {
+      background-color: #1e1e1e;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #2a2a2a;
+    }
+
+    .settings-panel h3 {
+      margin-top: 0;
+      font-size: 0.95rem;
+      color: #ff7700;
+      margin-bottom: 10px;
+    }
+
+    .settings-panel input, .settings-panel select {
+      width: 100%;
+      padding: 8px;
+      background-color: #2a2a2a;
+      border: 1px solid #444;
+      color: #fff;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 8px;
+    }
+
+    .settings-panel button {
+      background-color: #333;
+      color: #fff;
+      border: 1px solid #555;
+      padding: 8px;
+      width: 100%;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .settings-panel button:hover {
+      background-color: #444;
+    }
+
+    .storage-meter-container {
+      background-color: #2a2a2a;
+      border-radius: 4px;
+      height: 8px;
+      width: 100%;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    .storage-meter-bar {
+      background-color: #ff7700;
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .storage-meter-bar.warning {
+      background-color: #ff4444;
+    }
+
+    .storage-text {
+      font-size: 0.8rem;
+      color: #aaa;
+      margin: 0;
+    }
+
+    .storage-text.warning {
+      color: #ff4444;
+      font-weight: bold;
+    }
+
+    #search-filter {
+      width: 100%;
+      padding: 10px;
+      background-color: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 1rem;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+    }
+
+    .timeline-header {
+      font-size: 1.1rem;
+      color: #ff7700;
+      margin: 20px 0 10px 0;
+      border-bottom: 1px dashed #333;
+      padding-bottom: 5px;
+    }
+
+    .history-card {
+      background-color: #1e1e1e;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      position: relative;
+    }
+
+    .history-card.pinned {
+      border-left: 4px solid #ff7700;
+    }
+
+    .card-thumb {
+      width: 120px;
+      height: 70px;
+      background-color: #2a2a2a;
+      border-radius: 4px;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .no-thumb {
+      font-size: 0.75rem;
+      color: #777;
+    }
+
+    .card-info {
+      flex-grow: 1;
+      overflow: hidden;
+    }
+
+    .card-info h3 {
+      margin: 0 0 5px 0;
+      font-size: 1rem;
+    }
+
+    .card-info h3 a {
+      color: #4da6ff;
+      text-decoration: none;
+    }
+
+    .card-url {
+      display: block;
+      font-size: 0.8rem;
+      color: #888;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+
+    .card-date, .card-query, .card-form {
+      display: block;
+      font-size: 0.75rem;
+      color: #aaa;
+    }
+
+    .card-form {
+      color: #ffaa44;
+      margin-top: 2px;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .card-actions button {
+      background-color: #2a2a2a;
+      color: #fff;
+      border: 1px solid #444;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.75rem;
+    }
+
+    .card-actions button:hover {
+      background-color: #383838;
+    }
+
+    .btn-pin.pinned {
+      background-color: #ff7700;
+      border-color: #ff7700;
+      font-weight: bold;
+    }
+
+    .btn-delete-row:hover {
+      background-color: #552222 !important;
+      border-color: #ff4444 !important;
+      color: #ff4444;
+    }
+
+    #pagination-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      padding: 10px 0;
+    }
+
+    #pagination-controls button {
+      background-color: #2a2a2a;
+      color: #fff;
+      border: 1px solid #444;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #pagination-controls button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .empty-msg {
+      text-align: center;
+      color: #777;
+      margin-top: 40px;
+    }
+
+    footer {
+      margin-top: 40px;
+      border-top: 1px solid #2a2a2a;
+      padding-top: 15px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #777;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer a {
+      color: #ff7700;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="lock-screen">
+    <div class="lock-box">
+      <h2>🔒 ACCESO RESTRINGIDO</h2>
+      <input type="password" id="input-password" placeholder="Clave de acceso">
+      <button id="btn-acceder">Acceder</button>
+    </div>
+  </div>
+
+  <div id="main-content">
+    <header>
+      <h1>Trace Hider <span id="header-version" style="font-size: 0.9rem; color: #888;">v1.2.2</span></h1>
+      <div class="toolbar">
+        <button id="btn-export">Exportar Cifrado (.enc)</button>
+        <button id="btn-import">Importar Respaldo</button>
+        <input type="file" id="import-file-input" style="display: none;" accept=".enc,.json">
+        <button id="btn-clear" style="color: #ff4444;">Borrar No Fijados</button>
+      </div>
+    </header>
+
+    <div class="settings-grid">
+      <div class="settings-panel">
+        <h3>Seguridad y Clave</h3>
+        <input type="password" id="new-password" placeholder="Nueva contraseña">
+        <button id="btn-save-password">Actualizar Contraseña</button>
+      </div>
+      <div class="settings-panel">
+        <h3>Retención Automática (TTL)</h3>
+        <select id="ttl-select">
+          <option value="0">Conservar siempre</option>
+          <option value="7">Eliminar tras 7 días</option>
+          <option value="30">Eliminar tras 30 días</option>
+          <option value="90">Eliminar tras 90 días</option>
+        </select>
+        <button id="btn-save-ttl">Guardar TTL</button>
+      </div>
+      <div class="settings-panel">
+        <h3>Almacenamiento Local</h3>
+        <p class="storage-text" id="storage-info">Calculando espacio...</p>
+        <div class="storage-meter-container">
+          <div class="storage-meter-bar" id="storage-bar"></div>
+        </div>
+        <button id="btn-refresh-storage" style="margin-top: 5px;">Actualizar Metraje</button>
+      </div>
+    </div>
+
+    <input type="text" id="search-filter" placeholder="Filtrar por texto, búsquedas o datos de formulario...">
+    <div id="history-container"></div>
+
+    <footer>
+      <span>Trace Hider</span>
+      <span>GitHub: <a href="https://github.com/genocyber/Trace-Hider" target="_blank" rel="noopener noreferrer">genocyber/Trace-Hider</a></span>
+    </footer>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

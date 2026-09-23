@@ -1,9 +1,10 @@
-# 🕵️ Lanzador Oculto & Registro Privado Persistente
+# 🕵️ Lanzador Oculto & Registro Privado Persistente (Trace Hider)
 
 [![Firefox Add-on](https://img.shields.io/badge/Firefox-WebExtension%20Manifest%20V3-orange.svg)](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-genocyber%2FTrace--Hider-blueviolet.svg)](https://github.com/genocyber/Trace-Hider)[cite: 8]
 
-Una extensión ligera y discreta para **Mozilla Firefox** desarrollada bajo la arquitectura **Manifest V3**. Permite registrar de forma privada la actividad de navegación, búsquedas realizadas y datos no sensibles introducidos en formularios web, manteniendo las capturas de pantalla extremadamente optimizadas. 
+Una extensión ligera y discreta para **Mozilla Firefox** desarrollada por **José** bajo la arquitectura **Manifest V3**. Permite registrar de forma privada la actividad de navegación, búsquedas realizadas y datos no sensibles introducidos en formularios web, manteniendo las capturas de pantalla extremadamente optimizadas. 
 
 Se activa de manera rápida desde la barra de direcciones de Firefox (Omnibox) o mediante un atajo de teclado global.
 
@@ -11,25 +12,37 @@ Se activa de manera rápida desde la barra de direcciones de Firefox (Omnibox) o
 
 ## ✨ Características Principales
 
-- **Acceso Discreto (Omnibox):** Actívate escribiendo la palabra clave asignada (`secret` por defecto) en la URL + `Espacio` / `Tab` + `Enter`.
+- **Versión del Add-on:** 1.2.1
+- **Creador:** José
+- **Repositorio Oficial:** [GitHub - Trace-Hider](https://github.com/genocyber/Trace-Hider)[cite: 8]
+- **Acceso Discreto (Omnibox):** Actívate escribiendo la palabra clave asignada (`secreto` por defecto) en la URL + `Espacio` / `Tab` + `Enter`.
 - **Modo Oculto:** Diseñada para funcionar en segundo plano sin necesidad de mantener un icono visible en la barra de herramientas.
 - **Capturas Ultra Compactas (~5–10 KB):** Procesa cada vista previa con un `<canvas>` en un tamaño optimizado de $200\text{ px}$ en formato JPEG comprimido para ahorrar espacio en la base de datos local.
 - **Captura Inteligente de Formularios:** Registra entradas de texto e interacciones con formularios web, filtrando y excluyendo automáticamente campos sensibles (contraseñas, PINs, tarjetas de crédito, tokens, etc.).
 - **Buscador y Filtros en Tiempo Real:** Filtra registros por texto, consultas de motores de búsqueda (*Google, Bing, DuckDuckGo, Ecosia*) o páginas con datos de formulario.
 - **Organización Cronológica:** Agrupa automáticamente las visitas por periodos temporales (*Hoy*, *Ayer*, o fechas específicas).
 - **Interfaz Personalizable:** Soporte para modo oscuro / claro y paginación para mantener un rendimiento fluido.
+- **Cifrado Local Avanzado (AES-GCM):** Permite exportar e importar copias de respaldo seguras de todos los registros cifradas con claves protegidas (`.enc`).
+- **Bloqueo por Contraseña:** Pantalla de acceso restringido en el panel de control para proteger la privacidad de los registros frente a terceros.
+- **Control de Retención Automática (TTL):** Configura los días de retención automática de registros para optimizar el espacio de almacenamiento local.
+- **Medidor Dinámico de Almacenamiento:** Controla el espacio consumido con alertas visuales automáticas cuando se supera el 80% de la cuota estimada.
 
 ---
 
 ## 📂 Estructura del Proyecto
 
 ```text
-├── manifest.json       # Configuración global, permisos y palabra clave Omnibox
-├── background.js      # Script de fondo: capturas, miniaturas y eventos de navegación
-├── content.js         # Script de contenido: captura segura de datos de formularios
-├── options.html       # Interfaz gráfica del panel de control
-├── options.js         # Lógica de filtrado, temas, renderizado y gestión de datos
-└── icon.png           # Icono de la extensión (48x48 PNG)
+trace-hider/
+├── manifest.json         # Configuración global, permisos y palabra clave del Omnibox[cite: 8, 12]
+├── README.md             # Documentación oficial del proyecto[cite: 8]
+├── src/
+│   ├── background.js     # Script de fondo: capturas, miniaturas y eventos de navegación[cite: 8]
+│   ├── content.js        # Script de contenido: captura segura de datos de formularios[cite: 8]
+│   └── options/
+│       ├── options.html  # Interfaz gráfica del panel de control y pantalla de bloqueo[cite: 8, 13]
+│       └── options.js    # Lógica de cifrado AES, TTL, filtrado, paginación y gestión de datos[cite: 8, 14]
+└── assets/
+    └── icon.png          # Icono principal de la extensión (48x48 PNG)[cite: 8, 11]
 ```
 
 ---
