@@ -43,6 +43,7 @@ trace-hider/
 │       └── options.js    # Lógica de cifrado AES, TTL, filtrado, paginación y gestión de datos[cite: 8, 14]
 └── assets/
     └── icon.png          # Icono principal de la extensión (48x48 PNG)[cite: 8, 11]
+
 ```
 
 ---
@@ -50,52 +51,74 @@ trace-hider/
 ## 🛠️ Instalación Local en Firefox
 
 1. Clona este repositorio o descarga los archivos en una carpeta local:
-   ```bash
-   git clone https://github.com/tu-usuario/lanzador-oculto.git
-   ```
+```bash
+git clone [https://github.com/tu-usuario/lanzador-oculto.git](https://github.com/tu-usuario/lanzador-oculto.git)
+
+```
+
+
 2. Abre Firefox y navega a la siguiente dirección:
-   ```text
-   about:debugging#/runtime/this-firefox
-   ```
+```text
+about:debugging#/runtime/this-firefox
+
+```
+
+
 3. Haz clic en el botón **Cargar complemento temporal...** (*Load Temporary Add-on...*).
 4. Selecciona el archivo `manifest.json` ubicado en la carpeta del proyecto.
 5. *(Opcional)* Si deseas ocultarla totalmente, ve al menú de extensiones (🧩), haz clic derecho sobre el complemento y selecciona **Desanclar de la barra de herramientas**.
 
 ---
 
-## 🔑 Cómo Modificar la Palabra Clave del Omnibox
+## 🔑 Cómo Modificar la Palabra Clave y Contraseña
 
-Por restricciones de arquitectura de seguridad en la API WebExtensions de Firefox, la palabra clave (`omnibox.keyword`) **debe definirse directamente dentro del archivo `manifest.json`**. No es posible modificarla en tiempo de ejecución desde los ajustes JS de la extensión.
+### 1. Modificar la Palabra Clave del Omnibox
+
+Por restricciones de arquitectura de seguridad en la API WebExtensions de Firefox, la palabra clave (`omnibox.keyword`) **debe definirse directamente dentro del archivo `manifest.json**`. No es posible modificarla en tiempo de ejecución desde los ajustes JS de la extensión.
 
 Para personalizar tu palabra clave de acceso:
 
 1. Abre el archivo `manifest.json` en tu editor de texto.
 2. Modifica la propiedad `"keyword"` dentro del bloque `"omnibox"`:
-   ```json
-   "omnibox": {
-     "keyword": "tu_palabra_secreta"
-   }
-   ```
+```json
+"omnibox": {
+  "keyword": "tu_palabra_secreta"
+}
+
+```
+
+
 3. Guarda los cambios.
-4. Vuelve a `about:debugging#/runtime/this-firefox` y haz clic en **Recargar** (*Reload*) en la tarjeta de la extensión.
+
+### 2. Contraseña de Acceso al Panel
+
+Al instalar la extensión por primera vez, el sistema asigna de forma automática una clave predeterminada para proteger el panel privado:
+
+* **Contraseña inicial:** `1234`
+
+*Nota: Se recomienda encarecidamente actualizar esta contraseña desde la sección de seguridad de la interfaz de opciones tras el primer inicio.*
+
+### 3. Recargar la Extensión
+
+Vuelve a `about:debugging#/runtime/this-firefox` y haz clic en **Recargar** (*Reload*) en la tarjeta de la extensión para aplicar los cambios.
 
 ---
 
 ## 🚀 Modo de Uso
 
 1. Presiona `Ctrl + L` (o `Cmd + L` en macOS) para seleccionar la barra de direcciones de Firefox.
-2. Escribe tu palabra clave (ejemplo: `secret`) y presiona `Espacio` o `Tab`.
-3. Presiona `Enter` para abrir la interfaz del historial privado.
+2. Escribe tu palabra clave (ejemplo: `secreto`) y presiona `Espacio` o `Tab`.
+3. Presiona `Enter` para abrir la interfaz del historial privado e introduce tu contraseña (`1234`).
 
 ---
 
 ## 🔒 Privacidad y Seguridad
 
-- **100% Local:** Todos los datos registrados se conservan únicamente en el almacenamiento local del navegador (`browser.storage.local`). Ninguna información se envía a servidores externos.
-- **Filtro de Seguridad Activo:** La extensión se ignora automáticamente en sesiones de navegación de incógnito, dominios sensibles (`login`, `bank`, `paypal`, `stripe`, etc.) y excluye entradas con atributo `type="password"`.
+* **100% Local:** Todos los datos registrados se conservan únicamente en el almacenamiento local del navegador (`browser.storage.local`). Ninguna información se envía a servidores externos.
+* **Filtro de Seguridad Activo:** La extensión se ignora automáticamente en sesiones de navegación de incógnito, dominios sensibles (`login`, `bank`, `paypal`, `stripe`, etc.) y excluye entradas con atributo `type="password"`.
 
 ---
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia [MIT](LICENSE).
+Este proyecto está bajo la Licencia [MIT]
