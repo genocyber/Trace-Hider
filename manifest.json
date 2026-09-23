@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "Trace Hider",
+  "version": "2.5",
+  "description": "Registro privado y persistente con capturas compactas, lectura de formularios y palabra clave para el omnibox.",
+  "icons": {
+    "48": "icon.png"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "omnibox": {
+    "keyword": "secreto"
+  },
+  "permissions": [
+    "tabs",
+    "storage",
+    "webNavigation",
+    "unlimitedStorage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ]
+}
