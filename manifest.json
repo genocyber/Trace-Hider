@@ -4,6 +4,16 @@
   "version": "1.2.1",
   "description": "Registro privado y persistente con acceso protegido...",
   "author": "José",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "trace-hider@jose.extension",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
+    }
+  },
   "icons": {
     "48": "assets/icon.png"
   },
